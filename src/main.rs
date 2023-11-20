@@ -8,6 +8,10 @@ use std::fs::File;
 use std::thread;
 use std::time::Duration;
 
+// define the time you can access the computer here
+const MIN_H: u8 = 8;
+const MAX_H: u8 = 22;
+
 fn main() {
     let stdout = File::create("stdout.log").expect("Could not open stdout.log!");
     let stderr = File::create("stderr.log").expect("Could not open stderr.log!");
@@ -24,13 +28,10 @@ fn main() {
 }
 
 fn daemon() {
-    let min_h: u8 = 8;
-    let max_h: u8 = 22;
-
     loop {
         let current_time = chrono::Local::now().hour();
 
-        if current_time >= max_h as u32 || current_time <= min_h as u32 {
+        if current_time >= MAX_H as u32 || current_time <= MIN_H as u32 {
             system_shutdown::force_logout().expect("Could not logout!");
         }
 
